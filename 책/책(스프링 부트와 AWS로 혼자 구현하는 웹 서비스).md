@@ -168,3 +168,53 @@ public class HelloControllerTest {
 ```
 - 테스트 코드는 아까 작성했던 최상단 어플리케이션 파일에서 main문을 실행 후 localhost:8080/함수의 형태로 테스트 해볼 수 있음
 ### 롬복 소개 및 설치
+- 롬복 : 자바 개발자들의 필수 라이브러리의 이름임
+- Getter, Setter, 기본 생성자 등 자동으로 생성해줌
+- 인텔리제이에서는 플러그인을 통해 쉽게 롬복 설정 가능
+  - build.gradle의 dependencies 부분에 compile('org.projectlombok:lombok') 한줄 추가해주고 새로고침 해주면 된다.
+  - action창에서 plugins - lombok 검색 후 설치 - 인텔리제이 재실행
+  - setting - build - complier - annotaion processors 체크
+- 롬복을 활용한 테스트 코드
+```
+// 테스트 컨트롤러 파일
+package com.dolmac.springboot.web.dto;
+
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter//선언된 모든 필드의 get 메소드 생성
+@RequiredArgsConstructor //선언된 모든 final 필드가 포함된 생성자를 생성
+public class HelloResponseDto {
+
+    private final String name;
+    private final int amount;
+}
+
+```
+- 테스트 코드
+```
+package com.dolmac.springboot.dto;
+
+import com.dolmac.springboot.web.dto.HelloResponseDto;
+import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+public class HelloResponseDtoTest {
+    @Test
+    public void 롬복_기능_테스트(){
+        //given
+        String name = "test";
+        int amount = 1000;
+
+        //when
+        HelloResponseDto dto = new HelloResponseDto(name, amount);
+
+        //then
+        assertThat(dto.getName()).isEqualTo(name); //같은지 검증
+        assertThat(dto.getAmount()).isEqualTo(amount);
+    }
+}
+
+```
+- 이 책을 공부할 때 gradle 4.10.2버전을 사용할 것(안그러면 에러난다.)
+- 
