@@ -76,3 +76,95 @@
   - 깃 커밋창 실행 (ctrl + k) -> 커밋 -> 깃 푸쉬 실행(ctrl + shift + k) -> push 버튼 클릭
 - 개발 환경 구성 끝
 - 해당 책에 대해 공부한 코드는 springboot 레포지토리에 올라갈 것
+
+
+## 02. 스프링 부트에서 테스트 코드를 작성하자
+- 견고한 서비스를 만들고 싶은 곳에선 TDD를 하거나 최소 테스트 코드를 작성함
+- 최근에는 대부분의 회사가 테스트 코드에 관한 요구사항 존재
+### 2.1 테스트 코드 소개
+- TDD != 단위 테스트임
+- TDD는 테스트가 주도하는 개발로 테스트 코드를 먼저 작성하는 것부터 시작함
+- TDD = 항상 실패하는 테스트(RED) + 항상 성공하는 테스트(GREEN) + 리팩토링
+- 단위테스트 = 순수한 테스트 코드 작성
+- 테스트 코드의 장점
+  - 빠른 피드백 : 중간의 작업 단계들을 실행할 필요 없음
+  - 자동 검증 : 눈으로 검증하지 않아도 자동으로 검증해줌
+  - 개발자가 만든 기능을 안전하게 보호
+- 테스트 코드는 더이상 옵션이 아닌 100퍼센트 익혀야할 기술이자 습관임
+- 가장 대중적인 테스트 프레임워크 : xUnit ( 여기서 x는 언어 ) ex> JUnit, CppUnit 등
+- 우리는 자바를 개발할 것이므로 JUnit을 사용할 것
+### 2.2 Hello Controller 테스트 코드 작성하기
+- 일반적으로 패키지 명은 웹 사이트 주소의 역순으로 함
+- 스프링 부트에서는 언제 어디서나 같은 환경에서 스프링부트를 배포할 수 있도록 내장 WAS를 권장함
+  - 외장 WAS를 사용하면 WAS의 종류, 버전, 설정 등을 일치 시켜줘야함
+```
+//항상 스프링 부트 어플리케이션 최상단에 있어야 할 클래스 파일(여기서는 Application 클래스 파일)
+package com.dolmac.springboot;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication //스프링 부트의 자동 설정을 해주며 항상 프로젝트의 최상단에 위치해야함
+public class Application { // 앞으로 만들 클래스의 메인 클래스가 될 것
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args); //내장 was를 통한 실행
+    }
+}
+
+```
+- 테스트 컨트롤러 파일
+```
+package com.dolmac.springboot.web;
+
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController //컨트롤러를 json을 반환하는 컨트롤러로 변환해줌
+public class HelloController {
+    @GetMapping("/hello") //get method 요청을 받을 수 있는 api
+    public String hello(){
+        return "hello";
+    }// 이제 이 프로젝트는 /hello로 요청이 오면 hello를 반환해줄 것
+
+}
+
+```
+- 보통 테스트 테스트 클래스는 대상 클래스 이름에 Test를 붙임
+- 테스트 코드를 수행했을 때 tasks passed 가 총 갯수와 같다면 모든 테스트를 통과했음을 의미
+```
+// 테스트 코드 예제
+package com.dolmac.springboot;
+
+
+import com.dolmac.springboot.web.HelloController;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@RunWith(SpringRunner.class) // 실행자를 스프링 부트로 바꾸겠다.
+@WebMvcTest(controllers = HelloController.class) //스프링 테스트 어노테이션 선언
+public class HelloControllerTest {
+    @Autowired //스프링이 관리하는 빈(bean)을 주입받음
+    private MockMvc mvc;//웹 api를 테스트할 때 사용
+
+    @Test
+    public void hello가_리턴된다() throws Exception{
+        String hello = "hello";
+
+        mvc.perform(get("/hello"))//MockMvc를 통해 /hello를 get요청
+                .andExpect(status().isOk())//mvc.perform의 결과를 검증해서 상태가 200인가
+                .andExpect(content().string(hello));//리턴하는 값이 string type의 hello가 맞는지 검증
+    }
+}
+//위에서 작성했던 HelloController를 테스트하기 위한 HelloControllerTest 파일
+```
+- 테스트 코드는 아까 작성했던 최상단 어플리케이션 파일에서 main문을 실행 후 localhost:8080/함수의 형태로 테스트 해볼 수 있음
+### 롬복 소개 및 설치
