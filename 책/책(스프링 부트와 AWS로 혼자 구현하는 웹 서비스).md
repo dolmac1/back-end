@@ -217,4 +217,23 @@ public class HelloResponseDtoTest {
 
 ```
 - 이 책을 공부할 때 gradle 4.10.2버전을 사용할 것(안그러면 에러난다.)
-- 
+- 롬복 테스트를 위해서 만든 함수도 테스트할 수 있음
+```
+    //컨트롤러에 추가할 것
+    @GetMapping("/hello/dto") //HelloResponseDto 를 get 해서 사용
+    public HelloResponseDto helloDto(@RequestParam("name") String name, @RequestParam("amount") int amount){
+        return new HelloResponseDto(name, amount);
+    }
+```
+- test용 java 파일에 추가할것
+```
+    @Test
+    public void helloDto가_리턴된다() throws Exception {
+        String name = "dolmac";
+        int amount = 1000;
+        mvc.perform(get("/hello/dto").param("name",name).param("amount",String.valueOf(amount)))//param 은 파라미터 지정(단 string만 가능해서 변환)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name",is(name)))//선언된 필드와 받아온 필드가 값이 같은지 비교
+                .andExpect(jsonPath("$.amount",is(amount)));
+    }
+```
