@@ -255,4 +255,74 @@ public class HelloResponseDtoTest {
     - 정말 큰 데이터를 다뤄야해서 몽고DB로 바꿔야 하는 경우 등
 - Spring Data 의 하위 프로젝트들은 기본적인 명령어가 같아서 바꾸기 편리하다는게 핵심적인 이유
 - 실무에서 JPA를 잘 사용하지 못하는 이유는 배우기 어렵다는 것
+  - 객체 지향 프로그래밍과 관계형 데이터베이스를 잘 알아야하기 때문에
+- 하지만 잘 사용만하면 큰 보상이 있음
+  - CRUD를 직접 짤 필요 없고
+  - 부모-자식 관계 표현, 1:N관계 표현 등 객체지향 프로그래밍이 쉬움
+- 속도 이슈가 있지 않을까라는 문제도 있지만 JPA에는 성능 이슈 해결책들이 있어서 괜찮다
+- 앞으로 개발할 것 : 하나의 게시판 웹 어플리케이션
+### 3.2 프로젝트에 Spring Data Jpa 적용하기
+- build.gradle에 의존성 등록 필요
+```
+    compile('org.springframework.boot:spring-boot-starter-data-jpa') //스프링 부트용 Spring Data Jpa 추상화 라이브러리
+    compile('com.h2database:h2') //인메모리 관계형 데이터베이스
+```
+- domain 패키지를 만들고 이 패키지는 xml에 쿼리를 담고, 클래스는 오직 쿼리 결과만 담던 일을 도메인 패키지에서 해결
+- 보통은 필수 어노테이션(@로 시작하는 것)은 클래스에 가깝게 필수가 아닐수록 멀리 둔다
+- DB테이블과 매칭될 클래스를 모통 Entity class라고 함
+- 보통 이 Entity Class를 이용하여 데이터를 수정하지 직접 쿼리를 날리진 않음
+- spring-boot 레포지토리에 개발된 프로그램의 Entity Class
+```
+package com.dolmac.springboot.domain.posts;
+
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Getter // getter 메소드를 사용하겠다
+@NoArgsConstructor //기본 생성자 자동 생성
+@Entity //테이블과 링크될 클래스일때 사용
+
+public class Posts {
+    @Id // 테이블의 pk를 나타낼 때 사용
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //auto increment를 이용하여 id 생성
+    private Long id;
+
+    @Column(length = 500, nullable = false) //해당 클래스의 컬럼을 나타내며 굳이 선언하진 않아도 됨(문자열의 경우 varchar(255)가 기본 타입임)
+    private String title;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private  String content;
+
+    private String author;
+
+    @Builder //빌더 패턴 클래스 생성
+    public Posts(String title, String content, String author){
+        this.title = title;
+        this.content = content;
+        this.author = author;
+    }
+}
+
+```
+- 보통 서비스 초기에는 테이블 설계가 자주 바뀌는데 롬복의 어노테이션들이 변경을 최소화하도록 도와줌
+- 자바빈 규약을 생각했을 때 getter/setter를 무작정 생성하는 경우가 있는데 이럴 경우 클래스의 인스턴스 값들이 언제 어디서 변해야하는지 명확하기 구분하기 어려워 entity 클래스에는 setter를 만들지 않는다.
+- 대신 목적과 의도를 나타낼 수 있는 메소드를 추가하여 값변경을 해야함(ex. 주문 취소)
+- setter를 통해 값을 넣는게 아닌 주문취소라는 함수가 있으면 파라미터를 안넣고 주문이 바로 취소될 수 있도록
+- 빌더 패턴을 이용하여 개발하면 좋음
+```
+    example.bulider()
+        .a(a)
+        .b(b)
+        .build();
+```
+- Posts 클래스를 생성했으니 database에 접근할 jpa레포지토리 필요
+- 보통 ibatis나 mybatis에서 dao라고 부르는 것을 jpa에선 레포지토리라고 함
+- 인터페이스를 생성하고 JpaRepository<Entity class명, pk 타입> 이런식으로 상속만 하면 기본 crud는 자동으로 생성됨
+- 단 entity class 와 entity repository는 항상 같은 폴더에 있어야함
+### 3.3 Spring Data JPA 테스트 코드 작성하기
+- 기존에 TEST 코드를 작성하듯 test 경로에 작성하면 됨
 - 
