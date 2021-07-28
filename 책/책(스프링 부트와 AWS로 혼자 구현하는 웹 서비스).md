@@ -325,4 +325,60 @@ public class Posts {
 - 단 entity class 와 entity repository는 항상 같은 폴더에 있어야함
 ### 3.3 Spring Data JPA 테스트 코드 작성하기
 - 기존에 TEST 코드를 작성하듯 test 경로에 작성하면 됨
-- 
+- 테스트를 위한 코드(PostsRepositoryTest.java)
+```
+package com.dolmac.springboot.domain.posts;
+
+
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class PostRepositoryTest {
+    @Autowired
+    PostRepository postRepository;
+
+    @After //단위 테스트가 끝날때마다 수행할 동작
+    public void cleanup(){
+        postRepository.deleteAll();
+    }
+
+    @Test
+    public void 게시글저장_불러오기(){
+        String title = "테스트 게시글";
+        String content = "테스트 본문";
+
+        postRepository.save(Posts.builder().title(title).content(content).author("dolmac@naver.com").build());
+        //테이블에 insert나 update 수행
+        //when
+        List<Posts> postsList = postRepository.findAll();//테이블에서 모든 데이터 조회
+
+        //then
+        Posts posts = postsList.get(0);
+        assertThat(posts.getTitle()).isEqualTo(title);
+        assertThat(posts.getContent()).isEqualTo(content);
+    }
+}
+
+```
+- 위의 코드는 테스트로 데이터를 저장하고, 정상적으로 되었는가 체크하고, 삭제하는 순으로 동작한다.
+- @SpringBootTest를 사용할 경우 H2 데이터베이스가 자동으로 실행
+- jpa를 통한 쿼리의 로그를 보고싶다면 resourcs 밑에 application.properties를 만들고 spring.jpa.show_sql=true로 설정해주면 된다.
+- 로그에 mysql 형식으로 로그를 찍고싶다면 아래와 같이 application.properties에 추가해주자
+```
+    spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+```
+### 3.4 등록/수정/조회 API 만들기
+- API를 만들기 위해서는 총 3개의 클래스가 필요
+  - Request 데이터를 받을 Dto
+  - API요청을 받을 Controller
+  - 트랜젝션, 도메인 기능 간의 순서를 보장하는 Service(단, 서비스에서는 로직을 처리하는 것이 아닌 순서 보장만 해준다.)
+- 등록/수정/조회 동작을 하는 프로그램은 springboot 레포 참조
