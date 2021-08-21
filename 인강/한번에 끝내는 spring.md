@@ -71,4 +71,77 @@
     - 다음 브레이크 포인트로 이동 : f9
 - git : alt + `
 - 커스텀 단축키도 설정해줄 수 있음
-- 
+
+### ch03. 인텔리제이 실습 - to do list 구현하기
+#### 01. 요구사항 정리
+- 필요 기능
+    - todo 리스트 목록에 아이템 추가(post / 메소드를 통해 추가)
+    - todo 리스트 목록 중 특정 아이템을 조회 (get /{id} 를 통해 조회)
+    - todo 리스트 전체 목록을 조회(get / 메소드를 통해서 조회)
+    - todo 리스트 목록 중 특정 아이템을 수정(patch /{id}를 통해 수정)
+    - todo 리스트 목록 중 특정 아이템을 삭제(delete /{id}를 통해 삭제)
+    - todo 리스트 전체 목록 삭제(delete / 를 통해 삭제)
+
+#### 02. 환경설정 및 프로젝트 세팅(spring boot)
+- build.gradle에서 해당 프로젝트에 필요한 gradle 설정
+- plugins 에 사용할 플러그인 추가
+```
+plugins {
+    id 'org.springframework.boot' version '2.4.2'
+    id 'io.spring.dependency-management' version'1.0.11.RELEASE' // 스프링 부트 사용을 위한 플러그인
+    id 'java'
+}
+```
+- dependencies에 사용할 라이브러리 추가
+```
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    runtimeOnly 'com.h2database:h2' //라이브러리들 추가해줌    
+    
+    annotationProcessor("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok") // 롬복 사용을 위한 추가
+}
+```
+- gradle 새로고침하기
+- plugins 에서 롬복 설치해줘야하며, annotaion processors 를 enable로 설정 해줘야함
+
+#### 03. 모델 구현
+- 레이어를 구분해서 각각의 레이어가 해당하는 일만 하도록 구현해줘야함
+- 한번에 끝내는 spring/model 내에 있는 파일
+    - TodoEntity.java : Entity 정의
+    - TodoRequest.java : Request 정의
+    - TodoResponse.java : Response 정의
+
+#### 04. repository 구현
+- repository는 데이터를 주고받는 인터페이스라고 보면 됨
+- 한번에 끝내는 spring/repository 내에 있는 파일
+
+#### 05. 서비스 코드 구현
+- 서비스가 실제로 동작하는 코드 생성
+- 한번에 끝내는 spring/service 내에 있는 파일
+
+#### 06. 컨트롤러 구현
+- 컨트롤러는 서버에서 작업하면서 어떤 작업을 수행하고 어떤 return을 주어줄지 구현하는 곳
+- postman 사이트를 통해서 테스트를 할 수 있음
+- 테스트 결과가 잘 넘어온것으로 확인할 수도 있고 돌려받는 값이 없는 경우에는 intellij에 로그를 찍어서 확인을 할 수 도 있다.
+- 한번에 끝내는 spring/controller
+
+### ch04. 리팩토링
+#### 01. todolist 리팩토링
+- 우리가 작성한 프로그램은 간단하니까 크게 리팩토링할 필요는 없음
+- 예시로 하는 것
+- package에 우클릭 후 refactor를 통해서 이름을 바꿔줄 수 있음(연관된 패키지 모두함께)
+- 드래그를 통해서 다른 폴더로 클래스들을 옮겨줄 수 있음
+- 로그를 System.out.println으로 하는 것보다 slf4j로 찍는게 좋음
+
+### ch05. 디버깅
+#### 01. 디버깅 이해
+- 내가 작성한 코드의 문제를 찾는 과정
+- 중단점 지정해놓고 디버깅 모드 실행해서 디버깅하면 됨
+- step over, step into 등 다양한 진행 방식 존재
+- 계산상의 문제가 생기는 위치도 찾을 수 있음
+
+#### 02. 디버깅 실습
+- 우리 실습 코드에 대한 디버깅임
