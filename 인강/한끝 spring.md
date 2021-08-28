@@ -211,3 +211,47 @@ dependencies {
     - API 디자인을 섬세하게 노력하기 때문에 공부용으로 보기 꽤 좋은 코드임
     - 높은 코드 품질을 유지함
     - 단, 너무 자유롭기 때문에 종종 어려울 수 있음
+
+#### 03. DI - Dependency Injection
+- 스프링은 레고 바닥판이라고 생각하고, 그 위에 내 어플리케이션을 만든다고 생각하면된다.
+- 레고판 위의 클래스는 스프링으로 만든 내 클래스고, 그 밖에는 자바 클래스라고 보면 된다.
+- Bean이란?
+    - 자바에서의 javaBean
+        - 데이터를 저장하기 위한 구조체로 자바 빈 규약이라는 것을 따르는 구조체
+        - private 프로퍼티와 getter/setter로만 데이터를 접근하는 방식
+    - 스프링에서의 Bean
+        - 스프링에서는 IoC 컨테이너에 의해 생성되고 관리되는 객체
+        - 우리가 만든 클래스를 Spring IoC 컨테이너에 인스턴스로 생성하고 Spring Application Context에 의해 설정된 설정값을 바탕으로 수행
+- 스프링 컨테이너
+    - ApplicationContext 인터페이스를 통해 제공되는 스프링 컨테이너는 bean 객체의 생성 및 bean들의 조립 등을 담당
+- Bean의 등록
+    - 과거에는 xml로 설정을 관리해서 등록했음
+    - 현재는 annotaion 기반으로 bean 등록
+        - @Bean, @Controller, @Service
+- Bean LifeCycle callback
+    - 특정 이벤트가 발생했을 때 호출되는 메서드를 callback이라고 함
+    - Bean을 생성하고, 초기화하고 파괴하는 등의 특정 시점에서 호출되는 메서드를 lifecycle callback이라고 부름
+    - 주로 @PostConstruct(빈 생성 시점에 호출), @PreDestroy(빈 파괴 이전에 마무리가 필요한 경우 호출)
+
+#### 04. AOP
+- AOP는 관점 지향 프로그래밍으로 Aspect Oriented Programming 의 약자임
+- 공통적인 부분을 스프링이 받아서 처리해주는 것
+    - 로깅, 트랜잭션, 인증 등의 작업을 만들 때 AOP를 사용 하면 깔끔함
+- OOP로 처리하기 다소 까다로운 부분을 AOP방식을 도입하면 쉽게 공통 기능을 추가/수정/삭제 할 수 있음
+- AOP를 쓰면 코드의 분석이 어려워 실무에서 많이 쓰지는 않지만 꼭 필요한 부분엔 사용함
+- AOP의 기본 개념
+    - Aspect 는 여러 클래스나 기능에서 공통적으로 사용할 때 모듈화함, AOP 중에서 가장 많이 활용하는 부분은 @Transactional 기능
+    - Advice 는 AOP에서 실제로 적용하는 기능
+    - Join point 는 Aspect가 실행될 수 있는 부분들
+    - Pointcut 은 Join point 중에서 해당 Aspect를 실제로 적용할 대상을 뽑는 조건식
+    - Target Object는 Advice가 실제로 적용될 대상 오브젝트
+    - AOP Proxy는 대상 오브젝트에 aspect를 적용하는 경우 advice를 덧붙이기 위해 하는 작업
+    - Weaving은 Advice를 비즈니스 로직 코드에 삽입하는 것
+- AspectJ는 AOP를 제대로 사용하기 위해 꼭 필요한 라이브러리임
+- AspectJ는 스프링부트에 기본적으로 포함되어있음
+- 포인트컷은 특정 메서드 대상이나, 특정 클래스에 대한 포인트컷, 두개의 조건을 결합한 포인트 컷을 만들 수 있음
+- @Before("메소드"), @AfterReturning("메소드"), @Around("메소드")를 통해서 메소드를 호출하기 전, 후, 둘다 를 지정해줄 수 있음
+- critical section에 접근하고 나올때의 로직을 AOP로 만들어 줄 수 있음
+
+#### 05. Validation, Data binding
+- 
