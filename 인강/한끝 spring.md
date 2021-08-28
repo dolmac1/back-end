@@ -254,4 +254,58 @@ dependencies {
 - critical section에 접근하고 나올때의 로직을 AOP로 만들어 줄 수 있음
 
 #### 05. Validation, Data binding
+- Validation
+    - 유효성 검증으로 주로 사용자 또는 서버의 요청 내용에서 잘못된 내용이 있는지 확인하는 단계
+    - 개발자가 주로 챙겨야하는 유효성 검증은 2가지 있음
+        - 데이터 검증 : 필수 데이터 유무, 문자열 길이, 숫자형 데이터 범위, 형식 등 확인
+        - 비즈니스 검증 : 서비스에 정책에 따라 데이터 검증(ex. 배달앱의 경우 배달의 주문건이 결제 완료된 상태인가), 경우에 따라 외부 api를 호출하거나 db 데이터 조회 후 검증 필요
+- Spring에서의 Validation
+    - 스프링은 웹 레이어에 종속적이지 않은 방법으로 유효성 검증을 하려고 의도함
+    - java bean validation
+        - java bean 기반으로 간편하게 개별 데이터 검증
+        - 요즘 가장 많이 활용하는 방법으로 JavaBean 내에 어노테이션으로 검증 방법을 명시
+    - Spring validator 인터페이스 구현을 통한 검증
+        - supports는 validator 가 동작할 조건 정의
+        - validate는 검증
+        - java bean validation을 더 많이 써서 잘 사용 안함
+- validation 수행 시 주의사항 및 패턴
+    - validation을 너무 여러군데에서 하면 테스트, 유지보수성 떨어짐
+    - 여러군데에서 하면 할때마다 다른 검증 방법으로 이상하게 수행 될 수 있음
+    - validation 실패하면 exception을 날리는것이 좋음
+- 실무에서의 유효성 검증
+    - 요청 dto에서 1차 검증
+    - 실 서비스 로직 초반에 비즈니스 검증 로직 수행
+    - 실무에서 spring validator를 사용하였을 때의 장단점
+        - javabean validator보다 복잡한 검증 가능
+        - 코드 찾기가 어려움
+        - 완전히 데이터만 검증하는 것이 아니기 때문에 일부 비즈니스 검증이 들어갈 수 있음
+    - 해당 팀에서 사용하는 검증 패턴을 따르면 됨
+- Data Binding
+    - 사용자나 외부 서버에서 요청 데이터가 들어오면 특정 도메인 객체에 저장해서 우리 프로그램에 request에 담아주는 것
+- Convert<s,t> interface
+    - s타입을 받아서 t타입으로 변환해주는 인터페이스
+
+    ```
+        public interface Convert<S, T>{
+            T convert(S source);
+        }
+    ```
+    - 와 같은 형태
+    - json 타입으로 들어온 값을 우리가 원하는 객체로 변환해줄 수 있음
+- 컨버터가 spring bean으로 등록이 되어있으면 컨버터를 통해서 body나 header를 변환해줄 수 있음
+- 대외계 오픈소스 쓸 때 json으로 들어올 때 이름을 맞춰주는데 이것 때문일 것 같음
+- Formatter
+    - 특정 객체와 string 간의 변환을 담당
+    - date와 string 같은 변환을 할 때 사용
+    - 대부분의 객체에 대해서 json으로 변경해서 보내줄 때 formatter를 사용
+
+#### 06. Resourse
+- Spring Resource는 java.net.URL의 한계(classpth 내부 접근이나 상대경로 등)을 넘어서기 위해서 스프링에서 추가로 구현한 것
+- 파일 관련해서 주로 사용하는 것
+- 지원해주는 함수는 https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/resources.html 참고
+- Resource 구현체 목록(스프링 내부 리소스 구현체 중 대표적인 것들)
+    - UrlResource : java.net.URL을 래핑한 버전으로 기본적으로 HTTP로 원격 접속
+    - ClassPathResource : classpath를 통해 하위 의 리소스 접근 시 사용
+    - FileSystemResource : 파일을 다루기 위한 리소스 구현체
+    - SevletContextResource, InputStreamResource, ByteArrayResource : 이외의 다양한 구현체들
 - 
