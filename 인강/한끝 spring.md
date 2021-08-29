@@ -352,4 +352,34 @@ String hostName;
     - 이걸 달아주면 해당 어노테이션이 붙은 값을 사용하는 경우 null check를 항상 수행하도록 경고뜸
     - 스프링에서 제공해주는 것 이외에 jetbrain이나 lombok에서 제공해주는 null 관련 어노테이션도 있음
 
+
 ### Ch03. 예제를 만들며 이해하는 스프링 웹 어플리케이션 핵심 기술
+#### 01. 만들어볼 에제에 대한 설명
+- 프로젝트 명 : 개발자 키우기 프로젝트
+- 사람이 http로 요청을 날리면 데이터 바인딩해주고 검증 해주고 db와 transaction을 주고 받고 (예외처리하고) http 응답
+- 주요기능
+    - 개발자 생성하기 : post 메소드를 이용하여 개발자 생성(validation에 대해서 배우게 될 것)
+    - 개발자 목록과 특정 개발자 상세 내용 확인 : get 메소드를 활용하여 개발자 정보를 확인(DTO의 개념과 역할에 대해서 배우게 될 것)
+    - 개발자 정보 수정 : PUT 메소드를 이용하여 수정
+    - 개발자 삭제 : DELETE 메서드를 활용하여 개발자의 정보를 삭제(분리보관) (트랜잭션에 대해서 배울 것)
+
+#### 02. 롬복 설명
+- 롬복은 자바 스프링에서 반복적으로 사용하는 코드들을 간편하게 자동으로 쓸 수 있게 해주는 것
+- build.gradle에 추가해서 사용하면 됨(dependencies 내에 선언)
+```
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+```
+- getter 와 setter도 자동으로 생성해줄 수 있지만 변수명이 바뀌면 하나하나 수정해야하는 문제가 있는데 이것도 롬복으로 해결 가능(단 변수명에 shift + f6 누르면 사용하는 곳 한번에 변경도 가능)
+- dto를 테스트 할 때에는 ctrl+shift+t를 누르면 테스트 코드 생성 가능
+- 이 장에서 프로젝트에 생성된 것은 dmaker 폴더에 넣을 것
+- @Builder를 사용하면 atomic 하게 코드를 짤 수 있음
+- @Slf4j를 사용하면 로그를 조금 더 손쉽게 찍을 수 있음
+- @Setter는 setter를 선언
+- @Getter는 getter를 선언
+- @ToString는 System.out.println에 해당 클래스의 인스턴스를 넣으면 string 형식으로 보여줌
+- @NoArgsConstructor는 argument 가 없는 생성자 생성
+- @AllArgsConstructor 는 모든 argument가 들어간 생성자 생성
+- @RequiredArgsConstructor는 일부 argument 가 들어간 생성자 생성
+- @Data는 이거 하나면 위의 6줄 다 필요없음, 양날의 검이라 실제에서는 잘 안씀
+- 롬복에는 이외에도 다양한 기능이 많기 때문에 찾아서 사용하면 된다.
