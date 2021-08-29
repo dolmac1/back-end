@@ -308,4 +308,48 @@ dependencies {
     - ClassPathResource : classpath를 통해 하위 의 리소스 접근 시 사용
     - FileSystemResource : 파일을 다루기 위한 리소스 구현체
     - SevletContextResource, InputStreamResource, ByteArrayResource : 이외의 다양한 구현체들
-- 
+- Spring ResourceLoader
+    - 스프링 프로젝트 내 resource에 접근할 때 사용
+    - 기본적으로 applicationContext(스프링의 가장 핵심적인 기능이 모여있는 곳)에서 구현되어있음
+    - 대부분의 파일들은 자동으로 로딩되도록 되어있으나, 추가로 필요한 파일이 있을 때에 이 부분 사용
+    ```
+        ApplicationContext ctx;
+        Resource myTemplate = ctx.getResource("classpath:some/resource/path/myTemplate.txt");
+    ```
+- ResourcePatternResolver
+    - 스프링 ApplicationContext에서 ResourceLoader를 불러올 때 사용하는 인터페이스
+    - 위치 지정자 패턴(classpath, file, http)에 따라 리소스 로더 구현체를 선택
+- 어플리케이션 컨텍스트, 리소스 패스
+    - 예전에는 xml로 설정을 지정해줬는데 이때 보통 사용했었음
+
+#### 07. Spring Expression Language(SpEL)
+- 표현언어는 짧고 간단한 문법을 통해서 필요한 데이터나 설정값을 얻어올 수 있게 해주는 특별한 형태의 표현식에 가까운 간편한 언어
+- 주로 @Value("${config.value}")와 같은 방법으로 사용
+- SpelParser는 "" 안에 들어있는 문자열을 평가해서 결과값 생성
+- 보통은 값이 종종 바뀔 때 사용
+```
+@Value("#{ 1+1 }")
+int two;
+```
+- 로 하면 two에는 2가 들어감
+- hostname 같은 경우 테스트와 운영을 다르게 해야하는데 이럴 때 많이 사용
+```
+@Value("${server.hostname }")
+String hostName;
+```
+
+#### 08.Null-safety
+- 자바는 null에대한 체크가 자동으로 되지 않기 때문에 수동으로 필요함
+- 매번 해야하기 때문에 번거로움
+- Null Safety를 넣으면 ide에서 위치에 경고를 표시해줌
+- @NonNull
+    - 해당 값이 null이 아님을 나타내는 어노테이션
+    - org.springframework.lang.NonNull 사용
+    - 파라미터 선언 앞에 @NonNull을 써주면 된다
+    - 메소드에도 @NonNull을 붙여주면 return값이 null이 오면 경고를 내줌
+- Nullable
+    - 해당 데이터가 null일 수 있음을 나타내는 것
+    - 이걸 달아주면 해당 어노테이션이 붙은 값을 사용하는 경우 null check를 항상 수행하도록 경고뜸
+    - 스프링에서 제공해주는 것 이외에 jetbrain이나 lombok에서 제공해주는 null 관련 어노테이션도 있음
+
+### Ch03. 예제를 만들며 이해하는 스프링 웹 어플리케이션 핵심 기술
