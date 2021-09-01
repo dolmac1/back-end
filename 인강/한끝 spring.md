@@ -383,3 +383,38 @@ String hostName;
 - @RequiredArgsConstructor는 일부 argument 가 들어간 생성자 생성
 - @Data는 이거 하나면 위의 6줄 다 필요없음, 양날의 검이라 실제에서는 잘 안씀
 - 롬복에는 이외에도 다양한 기능이 많기 때문에 찾아서 사용하면 된다.
+
+#### 03. http 스팩에 대한 설명
+- http는 하이퍼 텍스트를 전송하는데 활용하는 프로토콜
+- 요청과 응답의 정의에 대해서만 간략 설명
+- http request 메시지 스펙
+    - 첫째줄 : 요청라인(http 메서드(get,put,post 등))
+    - 둘째줄 ~ 줄바꿈 전까지 : header
+    - 그 이후 : request body
+```
+POST /create-developer HTTP/1.1   //요청라인
+Content-Type: application/json
+ACCEPT: application/json   //header
+
+{
+    json 내용
+}//request body
+```
+- http response 메시지 스펙
+    - 첫째줄 : 상태라인(200,500, 404 등)
+    - 두번째줄부터 줄바꿈 나올때까지 : header
+    - 그 이후 : request body
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+... //헤더
+
+{
+    json 내용
+}  //바디
+```
+- http 스펙은 백엔드 개발자로써 알아두는 것이 좋음
+- http 완벽 가이드 책 좋다고 함
+
+#### 04. 아주 단순한 구조(1Layer)의 어플리케이션
+- 
