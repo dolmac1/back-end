@@ -417,4 +417,8 @@ Content-Type: application/json
 - http 완벽 가이드 책 좋다고 함
 
 #### 04. 아주 단순한 구조(1Layer)의 어플리케이션
-- 
+- spring initializer 에서 우측에 디펜던시를 골라서 추가할 수 있음(롬복, 스프링 웹, h2 db 같은 것)
+- package는 controller, dto, entity, service 이런식으로 나눠서 만들어놓고 구분해서 사용하는 것이 좋음
+- 프로젝트는 project/dmaker 폴더
+- @RestController는 bean 에 등록하는데 타입은 restcontroller인 것 (컨트롤러인데 리스폰스 바디를 붙여주는 것)
+- @GetMapping("/developers") 이런식으로 선언해두면 GET /developers HTTP/1.1 이런식의 요청이 오면 그 함수를 수행하는 것
