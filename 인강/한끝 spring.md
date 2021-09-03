@@ -422,3 +422,20 @@ Content-Type: application/json
 - 프로젝트는 project/dmaker 폴더
 - @RestController는 bean 에 등록하는데 타입은 restcontroller인 것 (컨트롤러인데 리스폰스 바디를 붙여주는 것)
 - @GetMapping("/developers") 이런식으로 선언해두면 GET /developers HTTP/1.1 이런식의 요청이 오면 그 함수를 수행하는 것
+
+#### 05. H2 DB 설명, 간단한 DB 저장 기능 구현
+- H2 DB는 주로 메모리 DB로 많이 사용하는 DB로 디펜던시에 추가하여 사용
+- 메모리에 남는 DB이기 때문에 어플리케이션이 죽으면 안의 내용이 다 지워짐
+- 간단한 테스트용으로 주로 사용
+- h2 디비의 내용을 보려면 application.properties 파일을 application.yml 파일로 리팩로링 해주고 아래내용 추가
+```
+spring:
+  h2:
+    console:
+      enabled: true
+```
+- 그럼 콘솔창에 jdbc:h2:mem:93d70239-3e7b-4c14-b3de-1c51ab014104 이런식으로 나오는데 http://localhost:8080/h2-console 을 통해서 콘솔 접근
+- @Entity를 넣어서 엔티티를 만들어줌
+- entity를 통해서 데이터베이스 틀을 만들고 repository를 생성해서 저장할 수 있는 repository 생성해서 사용
+- Service 에서 해당 entity를 사용하여 서비스를 만들고 controller에서 해당 서비스를 수행할 수 있도록 GET, POST 등 을 만들어서 사용하면됨
+- 결론 : entity(틀), repository(저장소), service(동작 함수), controller(호출 방법) 이렇게 구현 필요
