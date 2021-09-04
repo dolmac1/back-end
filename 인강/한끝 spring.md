@@ -439,3 +439,12 @@ spring:
 - entity를 통해서 데이터베이스 틀을 만들고 repository를 생성해서 저장할 수 있는 repository 생성해서 사용
 - Service 에서 해당 entity를 사용하여 서비스를 만들고 controller에서 해당 서비스를 수행할 수 있도록 GET, POST 등 을 만들어서 사용하면됨
 - 결론 : entity(틀), repository(저장소), service(동작 함수), controller(호출 방법) 이렇게 구현 필요
+
+#### 06. 트랜잭션의 개념
+- 트랜잭션은 여러 과정을 하나로 묶을 때 사용함(실패시 모두 취소됨)
+- 트랜잭션의 기본적인 덕목은 acid 로 압출할 수 있음
+- ACID
+    - Atomic : 원소성(하나의 함수가 하나처럼 동작하는 것)
+    - Consistency : 일관성
+    - Isolation : 고립성(db의 고립성이 낮으면 아무나 접속할 수 있어서 신뢰성이 떨어질 수 있음, 반대면 한 트랜잭션만 동일한 시간에 수행할 수 있기에 문제) 적절히 고려해야함
+    - Durability : 지속성(모든 이력을 남김)
