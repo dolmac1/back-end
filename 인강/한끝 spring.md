@@ -458,3 +458,6 @@ spring:
 
 #### 08. 데이터 밸리데이션 적용
 - 불필요한 import 삭제 : ctrl + alt + o
+- pretty print : alt + ctrl + l
+- 요청을 보낼때 생성이면 post로 해야함
+- dto에 request , response에 대한 틀을 만들고 @RequestBody CreateDeveloper.Request request 이런식으로 사용 가능

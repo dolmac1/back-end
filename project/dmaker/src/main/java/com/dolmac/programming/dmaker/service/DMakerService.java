@@ -1,5 +1,6 @@
 package com.dolmac.programming.dmaker.service;
 
+import com.dolmac.programming.dmaker.dto.CreateDeveloper;
 import com.dolmac.programming.dmaker.entity.Developer;
 import com.dolmac.programming.dmaker.repository.DeveloperRepository;
 import com.dolmac.programming.dmaker.type.DeveloperLevel;
@@ -15,7 +16,7 @@ public class DMakerService {
     private final DeveloperRepository developerRepository;
 
     @Transactional
-    public void createDeveloper(){
+    public void createDeveloper(CreateDeveloper.Request request){
         Developer developer = Developer.builder()
                 .developerLevel(DeveloperLevel.JUNIOR)
                 .developerSkillType(DeveloperSkillType.BACKEND)
