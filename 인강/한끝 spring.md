@@ -448,3 +448,13 @@ spring:
     - Consistency : 일관성
     - Isolation : 고립성(db의 고립성이 낮으면 아무나 접속할 수 있어서 신뢰성이 떨어질 수 있음, 반대면 한 트랜잭션만 동일한 시간에 수행할 수 있기에 문제) 적절히 고려해야함
     - Durability : 지속성(모든 이력을 남김)
+
+
+#### 07. AOP, Transactional
+- 기존의 jdbc를 사용해서 db에 접근을 해서 동작을 할 경우 try catch문을 통해서 동작을 다 한 후에 commit을 해주어서 acid를 해결시켜줬었음
+- 만약 중간에 실패한 경우 commit이 아닌 rollback을 했었음
+- 특정 지점마다 공통적이고 반복적인 명령어를 날려주는 것 - AOP랑 연관 있음(DB 접속, DB COMMIT, DB ROLLBACK같은 것들)
+- @Transactional을 붙여줄 경우 TransactionInterceptor.java에 구현되있는 동작들을 특정 위치에서 자동으로 수행해준다고 보면 됌(db connect, commit, rollback 등)
+
+#### 08. 데이터 밸리데이션 적용
+- 불필요한 import 삭제 : ctrl + alt + o

@@ -1,6 +1,5 @@
 package com.dolmac.programming.dmaker.controller;
 
-import com.dolmac.programming.dmaker.repository.DeveloperRepository;
 import com.dolmac.programming.dmaker.service.DMakerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,7 @@ public class DMakerController {
         return Arrays.asList("dolmac","chovy","bdd");// 화면에 리스트를 리턴해줌
     }
 
-    @GetMapping("/create-developers")
+    @PostMapping("/create-developers")
     public List<String> createDevelopers(){
         //GET /developers HTTP/1.1 로 들어오면 여기를 탐
         log.info("GET /create-developers HTTP/1.1");//로그 찍어줌
