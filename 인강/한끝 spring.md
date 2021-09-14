@@ -461,3 +461,13 @@ spring:
 - pretty print : alt + ctrl + l
 - 요청을 보낼때 생성이면 post로 해야함
 - dto에 request , response에 대한 틀을 만들고 @RequestBody CreateDeveloper.Request request 이런식으로 사용 가능
+
+#### 09. 비즈니스 밸리데이션 적용
+- 서로 연관있는 데이터를 확인하는게 비즈니스 밸리데이션
+- DMakerService 파일의 validateCreateDeveloperRequest가 비즈니스 밸리데이션 체크하는 부분
+
+#### 10. 간단한 http 테스트 만들기
+- http request 파일을 만들어서 테스트 가능
+
+#### 10-1. 간단한 http 테스트 만들기 (Postman을 활용한 http test 방법)
+- 

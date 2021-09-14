@@ -1,5 +1,6 @@
 package com.dolmac.programming.dmaker.dto;
 
+import com.dolmac.programming.dmaker.entity.Developer;
 import com.dolmac.programming.dmaker.type.DeveloperLevel;
 import com.dolmac.programming.dmaker.type.DeveloperSkillType;
 import lombok.*;
@@ -48,5 +49,13 @@ public class CreateDeveloper {
         private Integer experienceYears;
 
         private String memberId;
+
+        public static Response fromEntity(Developer developer){
+            return Response.builder().
+                    developerLevel(developer.getDeveloperLevel())
+                    .developerSkillType(developer.getDeveloperSkillType())
+                    .experienceYears(developer.getExperienceYear())
+                    .memberId(developer.getMemberId()).build();
+        }
     }
 }

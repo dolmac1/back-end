@@ -32,14 +32,14 @@ public class DMakerController {
     }
 
     @PostMapping("/create-developers")
-    public List<String> createDevelopers(
+    public CreateDeveloper.Response createDevelopers(
             @RequestBody CreateDeveloper.Request request
             ) {
         //GET /developers HTTP/1.1 로 들어오면 여기를 탐
-        log.info("GET /create-developers HTTP/1.1");//로그 찍어줌
+        log.info("POST /create-developers HTTP/1.1");//로그 찍어줌
         log.info("request = ",request);
-        dMakerService.createDeveloper (request);
+        return dMakerService.createDeveloper (request);
 
-        return Collections.singletonList("dolmac");// 화면에 리스트를 리턴해줌
+        //return Collections.singletonList("dolmac");// 화면에 리스트를 리턴해줌
     }
 }
