@@ -470,4 +470,8 @@ spring:
 - http request 파일을 만들어서 테스트 가능
 
 #### 10-1. 간단한 http 테스트 만들기 (Postman을 활용한 http test 방법)
-- 
+- http request 파일을 만들어서 인텔리제이에서 테스트하는 것은 인텔리제이의 유료버전의 기능임
+- postman 프로그램을 이용하여 request를 날릴 수 있음
+- postman에서 방식을 고르고 주소 작성, post의 경우 json을 넣어줘야하는데 body 클릭 - raw - json 클릭해서 json 형식으로 넣어서 보낼 수 있음
+- 저장해두고 테스트할때마다 사용 가능
+- 여러 명령어를 합쳐서 통합테스트를 할수도 있음
