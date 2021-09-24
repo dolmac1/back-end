@@ -475,3 +475,18 @@ spring:
 - postman에서 방식을 고르고 주소 작성, post의 경우 json을 넣어줘야하는데 body 클릭 - raw - json 클릭해서 json 형식으로 넣어서 보낼 수 있음
 - 저장해두고 테스트할때마다 사용 가능
 - 여러 명령어를 합쳐서 통합테스트를 할수도 있음
+
+#### 11. Developer Get(조회) 기능 개발
+- 아래의 문구를 application.yml에 넣으면 sql문이 어떻게 들어가는지 로그를 통해서 볼 수 있음
+```
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+```
+- 데이터를 가져와서 보여줄때에는 모든 부분을 보여주는건 보안상에 안좋을 수 있으므로 dto를 만들어서 특정 부분만 조회되도록 한다.
+    - 예를들어 주민등록번호같은게 들어있는 경우 전체로 가져오면 문제 생길 수 있다.
+- 디비에 저장되어있는 값은 get 방식을 통해서 가져옴
+- 한개를 가져올 때에는 조회조건을 넣어서 하면 됌

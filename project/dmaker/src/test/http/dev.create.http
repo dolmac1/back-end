@@ -1,12 +1,14 @@
+//db에 넣기
+
 ### Send POST request with json body
 POST http://localhost:8080/create-developers
 Content-Type: application/json
 
 {
   "developerLevel": "JUNIOR",
-  "developerSkillType": "FRONT_END",
-  "experienceYear": 3,
-  "memberId": "9717984",
-  "name": "dolmac",
-  "age": 27
+  "developerSkillType": "FRONTEND",
+  "experienceYears": 2,
+  "memberId": "2851",
+  "age": 27,
+  "name": "chovy"
 }

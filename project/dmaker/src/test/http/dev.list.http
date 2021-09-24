@@ -1,0 +1,6 @@
+// 전체 조회해오기
+
+### GET request with a header
+GET http://localhost:8080/developers
+Accept: application/json
+
