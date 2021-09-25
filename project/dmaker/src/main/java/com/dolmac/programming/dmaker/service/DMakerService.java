@@ -3,6 +3,7 @@ package com.dolmac.programming.dmaker.service;
 import com.dolmac.programming.dmaker.dto.CreateDeveloper;
 import com.dolmac.programming.dmaker.dto.DeveloperDetailDto;
 import com.dolmac.programming.dmaker.dto.DeveloperDto;
+import com.dolmac.programming.dmaker.dto.EditDeveloper;
 import com.dolmac.programming.dmaker.entity.Developer;
 import com.dolmac.programming.dmaker.exception.DMakerErrorCode;
 import com.dolmac.programming.dmaker.exception.DMakerException;
@@ -65,4 +66,37 @@ public class DMakerService {
         return developerRepository.findByMemberId(memberId)
                 .map(DeveloperDetailDto::fromEntity).orElseThrow(() -> new DMakerException(DMakerErrorCode.NO_DEVELOPER));
     }
+    @Transactional
+    public DeveloperDetailDto editDeveloper(String memberId, EditDeveloper.Request request) {
+        validateEditDeveloperRequest(request, memberId);
+
+        Developer developer = developerRepository.findByMemberId(memberId).orElseThrow(() -> new DMakerException(DMakerErrorCode.NO_DEVELOPER));
+        developer.setDeveloperLevel(request.getDeveloperLevel());
+        developer.setDeveloperSkillType(request.getDeveloperSkillType());
+        developer.setExperienceYear(request.getExperienceYears());
+
+        return DeveloperDetailDto.fromEntity(developer);
+    }
+
+    private void validateEditDeveloperRequest(EditDeveloper.Request request, String memberId) {
+        DeveloperLevel developerLevel = request.getDeveloperLevel();
+        DeveloperSkillType developerSkillType = request.getDeveloperSkillType();
+
+        validateDeveloperLevel(request);
+    }
+
+    private void validateDeveloperLevel(EditDeveloper.Request request) {
+        if(request.getDeveloperLevel() == DeveloperLevel.SINIOR
+                && request.getExperienceYears() < 10){
+            throw new DMakerException(DMakerErrorCode.LEVEL_ERPERIENCE_YEAR_NOT_MATCHED);//ALT + ENTER 눌러서 STATIC IMPORT해서 사용도 가능
+        }
+        if(request.getDeveloperLevel() == DeveloperLevel.JUNGNIOR
+                &&(request.getExperienceYears() <3 || request.getExperienceYears() > 10)){
+            throw new DMakerException(DMakerErrorCode.LEVEL_ERPERIENCE_YEAR_NOT_MATCHED);
+        }
+        if(request.getDeveloperLevel() == DeveloperLevel.JUNIOR && request.getExperienceYears() > 4){
+            throw new DMakerException(DMakerErrorCode.LEVEL_ERPERIENCE_YEAR_NOT_MATCHED);
+        }
+    }
 }
+

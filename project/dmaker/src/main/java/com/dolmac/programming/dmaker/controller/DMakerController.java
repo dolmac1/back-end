@@ -3,12 +3,14 @@ package com.dolmac.programming.dmaker.controller;
 import com.dolmac.programming.dmaker.dto.CreateDeveloper;
 import com.dolmac.programming.dmaker.dto.DeveloperDetailDto;
 import com.dolmac.programming.dmaker.dto.DeveloperDto;
+import com.dolmac.programming.dmaker.dto.EditDeveloper;
 import com.dolmac.programming.dmaker.service.DMakerService;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,5 +47,15 @@ public class DMakerController {
         return dMakerService.createDeveloper (request);
 
         //return Collections.singletonList("dolmac");// 화면에 리스트를 리턴해줌
+    }
+
+    @PutMapping("/developer/{memberId}")
+    public DeveloperDetailDto editDeveloper(
+            @PathVariable String memberId,
+            @Valid @RequestBody EditDeveloper.Request request
+    ){
+        log.info("PUT /developers HTTP/1.1");
+
+        return dMakerService.editDeveloper(memberId, request);
     }
 }
