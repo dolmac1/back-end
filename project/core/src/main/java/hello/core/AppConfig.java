@@ -19,17 +19,20 @@ public class AppConfig {
     }
     @Bean
     public OrderService orderService() {
+        System.out.println("call AppConfig.orderService");
         return new OrderServiceImpl(
                 memberRepository(),
                 discountPolicy());
     }
     @Bean
     public MemberRepository memberRepository() {
+        System.out.println("call AppConfig.memberService");
         return new MemoryMemberRepository();
     }
     @Bean
     public DiscountPolicy discountPolicy() {
 //        return new FixDiscountPolicy(); //여기만 바꿔주면 정책 변경 가능
+        System.out.println("call AppConfig.memberRepository");
         return new RateDiscountPolicy();
     }
 }
